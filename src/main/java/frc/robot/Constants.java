@@ -58,4 +58,13 @@ public final class Constants {
     public static final double DRIVE_SCALING = .7;
     public static final double ROTATION_SCALING = .8;
   }
+
+  public static final class ShakeConstants {
+    // Speed for shake movement (0.8 = 80% power for quick motion)
+    public static final double SHAKE_SPEED = 0.8;
+
+    // Duration of each shake movement in seconds (0.2s forward, 0.2s backward)
+    // Kept short to return to same position and dislodge stuck fuel
+    public static final double SHAKE_DURATION = 0.2;
+  }
 }

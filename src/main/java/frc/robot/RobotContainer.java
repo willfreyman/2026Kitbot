@@ -5,17 +5,23 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import static frc.robot.Constants.OperatorConstants.*;
+import frc.robot.commands.AutoAim;
+import frc.robot.commands.AutoTarget;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
 import frc.robot.commands.ExampleAuto;
 import frc.robot.commands.Intake;
 import frc.robot.commands.LaunchSequence;
+import frc.robot.commands.Shake;
+import frc.robot.commands.auto.*;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
+import frc.robot.subsystems.OLEDPongSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,6 +34,11 @@ public class RobotContainer {
   // The robot's subsystems
   private final CANDriveSubsystem driveSubsystem = new CANDriveSubsystem();
   private final CANFuelSubsystem fuelSubsystem = new CANFuelSubsystem();
+
+  // OLED Pong - Fun extra, disabled if causing issues
+  // Set ENABLE_OLED_PONG to false to completely disable
+  private static final boolean ENABLE_OLED_PONG = true;
+  private final OLEDPongSubsystem pongSubsystem = ENABLE_OLED_PONG ? new OLEDPongSubsystem() : null;
 
   // The driver's controller
   private final CommandXboxController driverController = new CommandXboxController(
@@ -46,10 +57,17 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    // Set the options to show up in the Dashboard for selecting auto modes. If you
-    // add additional auto modes you can add additional lines here with
-    // autoChooser.addOption
-    autoChooser.setDefaultOption("Autonomous", new ExampleAuto(driveSubsystem, fuelSubsystem));
+    // Configure autonomous modes
+    autoChooser.setDefaultOption("Shoot and Backup", new ShootAndBackup(driveSubsystem, fuelSubsystem));
+    autoChooser.addOption("Shoot and Collect", new ShootAndCollect(driveSubsystem, fuelSubsystem));
+    autoChooser.addOption("Drive and Intake", new DriveAndIntake(driveSubsystem, fuelSubsystem));
+    autoChooser.addOption("Turn Left and Shoot", new TurnAndShoot(driveSubsystem, fuelSubsystem, true));
+    autoChooser.addOption("Turn Right and Shoot", new TurnAndShoot(driveSubsystem, fuelSubsystem, false));
+    autoChooser.addOption("Original Example", new ExampleAuto(driveSubsystem, fuelSubsystem));
+    autoChooser.addOption("Do Nothing", new edu.wpi.first.wpilibj2.command.WaitCommand(0.1));
+
+    // Put the chooser on the dashboard
+    SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   /**
@@ -82,6 +100,25 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(new Drive(driveSubsystem, driverController));
 
     fuelSubsystem.setDefaultCommand(fuelSubsystem.run(() -> fuelSubsystem.stop()));
+
+    operatorController.y().onTrue(new Shake(driveSubsystem));
+
+    // Auto-targeting system: HOLD X button on driver controller
+    // Driver can override with joysticks at any time while X is held
+    driverController.x().whileTrue(new AutoTarget(driveSubsystem, driverController));
+
+    // Generic auto-aim (retroreflective targets): A button on driver controller
+    driverController.a().whileTrue(new AutoAim(driveSubsystem));
+
+
+    // Emergency OLED disable: Hold Start + Back buttons together
+    if (ENABLE_OLED_PONG && pongSubsystem != null) {
+      operatorController.start().and(operatorController.back())
+        .onTrue(new edu.wpi.first.wpilibj2.command.InstantCommand(() -> {
+          pongSubsystem.disableOLED();
+          edu.wpi.first.wpilibj.DriverStation.reportWarning("OLED Pong disabled via controller", false);
+        }));
+    }
   }
 
   /**
