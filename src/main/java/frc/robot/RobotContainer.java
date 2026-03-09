@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import static frc.robot.Constants.OperatorConstants.*;
-import frc.robot.commands.AutoAim;
+import frc.robot.commands.AutoCollect;
 import frc.robot.commands.AutoTarget;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
@@ -103,22 +103,16 @@ public class RobotContainer {
 
     operatorController.y().onTrue(new Shake(driveSubsystem));
 
+    // Auto-collect: HOLD A on driver controller — drives toward fuel + runs intake
+    driverController.a().whileTrue(
+        new AutoCollect(driveSubsystem, driverController)
+            .alongWith(new Intake(fuelSubsystem)));
+
     // Auto-targeting system: HOLD X button on driver controller
     // Driver can override with joysticks at any time while X is held
     driverController.x().whileTrue(new AutoTarget(driveSubsystem, driverController));
 
-    // Generic auto-aim (retroreflective targets): A button on driver controller
-    driverController.a().whileTrue(new AutoAim(driveSubsystem));
 
-
-    // Emergency OLED disable: Hold Start + Back buttons together
-    if (ENABLE_OLED_PONG && pongSubsystem != null) {
-      operatorController.start().and(operatorController.back())
-        .onTrue(new edu.wpi.first.wpilibj2.command.InstantCommand(() -> {
-          pongSubsystem.disableOLED();
-          edu.wpi.first.wpilibj.DriverStation.reportWarning("OLED Pong disabled via controller", false);
-        }));
-    }
   }
 
   /**

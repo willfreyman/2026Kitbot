@@ -51,19 +51,23 @@ public class AutoTarget extends Command {
   // - This guides robot towards target area when primary is out of view
   // - Since helper is LEFT of primary, turning towards helper will eventually reveal primary
 
-  // Control parameters
-  private static final double kP = 0.045; // Proportional gain (increased for better fine control) // was 0.035
-  private static final double kMinCommand = 0.08; // Minimum rotation speed (reduced for finer control) // was 0.125
-  private static final double kMaxCommand = 8; // Maximum rotation speed
-  private static final double kTolerance = 1.5; // Degrees of acceptable error (tighter tolerance) // was 4
+  // PD control parameters
+  private static final double kP = 0.035; // Proportional gain
+  private static final double kD = 0.004; // Derivative gain (dampens oscillation)
+  private static final double kTolerance = 1.5; // Degrees — stop commanding inside this range
+  private static final double kMaxCommand = 0.5; // Maximum rotation speed
+
+  // Output smoothing (low-pass filter to prevent jerky changes)
+  private static final double kSmoothing = 0.3; // 0-1, lower = smoother but slower response
 
   // Driver override detection
-  private static final double JOYSTICK_DEADBAND = 0.1; // Joystick deadband for override detection
+  private static final double JOYSTICK_DEADBAND = 0.1;
 
-  // Debug tracking
+  // State tracking
   private int executeCount = 0;
   private long startTime = 0;
-  private double lastError = 0; // For derivative calculation (optional future enhancement)
+  private double lastError = 0;
+  private double smoothedOutput = 0;
   private boolean driverOverride = false;
 
   public AutoTarget(CANDriveSubsystem driveSubsystem, CommandXboxController driverController) {
@@ -74,10 +78,11 @@ public class AutoTarget extends Command {
 
   @Override
   public void initialize() {
-    // Reset debug counters
     executeCount = 0;
     startTime = System.currentTimeMillis();
     wasScheduled = true;
+    lastError = 0;
+    smoothedOutput = 0;
 
     DriverStation.reportWarning("=== AUTO-TARGET INITIALIZE START ===", false);
 
@@ -137,6 +142,9 @@ public class AutoTarget extends Command {
       return; // Skip all auto-aim logic
     } else if (driverOverride) {
       // Driver just released rotation stick, resuming auto-aim
+      // Reset state so stale values don't cause a twitch
+      smoothedOutput = 0;
+      lastError = 0;
       DriverStation.reportWarning(">>> AUTO-AIM RESUMED <<<", false);
       driverOverride = false;
     }
@@ -183,43 +191,38 @@ public class AutoTarget extends Command {
     }
 
     if (foundPrimary || foundHelper) {
-      // Calculate rotation needed (error from center)
-      double rotationSpeed = targetTx * kP;
+      double rotationSpeed;
 
-      // If using helper, could use gentler control to avoid overshooting when primary appears
-      // Uncomment to enable slower helper tracking:
-      // if (usingHelper) {
-      //   rotationSpeed *= 0.7; // 70% speed when following helper
-      // }
-
-      // Apply minimum command threshold only for larger errors (> 3 degrees)
-      // For small errors, use natural proportional control for fine adjustments
-      if (Math.abs(targetTx) > 3.0 && Math.abs(rotationSpeed) > 0.001 && Math.abs(rotationSpeed) < kMinCommand) {
-        rotationSpeed = Math.signum(rotationSpeed) * kMinCommand;
-      }
-
-      // Clamp maximum speed
-      rotationSpeed = Math.max(-kMaxCommand, Math.min(kMaxCommand, rotationSpeed));
-
-      // Apply rotation with any driver forward input
-      driveSubsystem.driveArcade(finalForward, -rotationSpeed); 
-      
-      // Status feedback
-      if (usingHelper) {
-        // Using helper - different messaging
-        DriverStation.reportWarning("Following helper ID " + HELPER_TAG_ID + ": tx=" + String.format("%.1f", targetTx) + ", rotation=" + String.format("%.3f", rotationSpeed), false);
+      if (Math.abs(targetTx) <= kTolerance) {
+        // Inside deadband — stop rotating, let it settle
+        rotationSpeed = 0;
+        smoothedOutput = 0;
+        lastError = targetTx;
       } else {
-        // Using primary - normal centering messages
-        if (Math.abs(targetTx) <= kTolerance) {
-          DriverStation.reportWarning("TARGET CENTERED! ID " + targetId + " tx=" + String.format("%.1f", targetTx), false);
-        } else {
-          DriverStation.reportWarning("Auto-targeting ID " + targetId + ": tx=" + String.format("%.1f", targetTx) + ", rotation=" + String.format("%.3f", rotationSpeed), false);
-        }
+        // PD control: P reacts to error, D resists rapid change
+        double derivative = targetTx - lastError;
+        rotationSpeed = (targetTx * kP) + (derivative * kD);
+        lastError = targetTx;
+
+        // Clamp
+        rotationSpeed = Math.max(-kMaxCommand, Math.min(kMaxCommand, rotationSpeed));
+
+        // Smooth output — blend new value with previous to prevent jerky transitions
+        smoothedOutput = (kSmoothing * rotationSpeed) + ((1.0 - kSmoothing) * smoothedOutput);
+        rotationSpeed = smoothedOutput;
       }
 
-      // Show if driver is also moving forward/backward
-      if (driverWantsMovement) {
-        DriverStation.reportWarning("  + Driver movement: " + String.format("%.2f", finalForward), false);
+      driveSubsystem.driveArcade(finalForward, -rotationSpeed);
+
+      // Status feedback (less spammy)
+      if (executeCount <= 3 || executeCount % 25 == 0) {
+        if (usingHelper) {
+          DriverStation.reportWarning("Following helper ID " + HELPER_TAG_ID + ": tx=" + String.format("%.1f", targetTx), false);
+        } else if (Math.abs(targetTx) <= kTolerance) {
+          DriverStation.reportWarning("TARGET CENTERED! tx=" + String.format("%.1f", targetTx), false);
+        } else {
+          DriverStation.reportWarning("Targeting ID " + targetId + ": tx=" + String.format("%.1f", targetTx) + " rot=" + String.format("%.3f", rotationSpeed), false);
+        }
       }
     } else {
       // No tags visible at all - still allow driver movement
