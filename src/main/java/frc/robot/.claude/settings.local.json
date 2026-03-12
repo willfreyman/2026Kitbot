@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push origin main)",
+      "Bash(git remote set-url origin git@github.com:willfreyman/2026Kitbot.git)",
+      "Bash(git pull origin main --no-rebase)",
+      "Bash(git push origin main --force)",
+      "Bash(git fetch origin)",
+      "Bash(git pull origin main)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

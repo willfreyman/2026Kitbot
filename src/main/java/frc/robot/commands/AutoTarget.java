@@ -55,10 +55,10 @@ public class AutoTarget extends Command {
   private static final double kP = 0.035; // Proportional gain
   private static final double kD = 0.004; // Derivative gain (dampens oscillation)
   private static final double kTolerance = 1.5; // Degrees — stop commanding inside this range
-  private static final double kMaxCommand = 0.5; // Maximum rotation speed
+  private static final double kMaxCommand = 1; // Maximum rotation speed
 
   // Output smoothing (low-pass filter to prevent jerky changes)
-  private static final double kSmoothing = 0.3; // 0-1, lower = smoother but slower response
+  private static final double kSmoothing = 05; // 0-1, lower = smoother but slower response
 
   // Driver override detection
   private static final double JOYSTICK_DEADBAND = 0.1;

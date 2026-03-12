@@ -104,10 +104,10 @@ public class RobotContainer {
     operatorController.y().onTrue(new Shake(driveSubsystem));
 
     // Auto-collect: HOLD A on driver controller — drives toward fuel + runs intake
-    driverController.a().whileTrue(
+    /*driverController.a().whileTrue(
         new AutoCollect(driveSubsystem, driverController)
             .alongWith(new Intake(fuelSubsystem)));
-
+    */
     // Auto-targeting system: HOLD X button on driver controller
     // Driver can override with joysticks at any time while X is held
     driverController.x().whileTrue(new AutoTarget(driveSubsystem, driverController));
