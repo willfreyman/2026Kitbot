@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/c/Users/WillFreyman/Desktop/2026KitBotClasses-good-og/src/main/java/frc/robot/subsystems/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

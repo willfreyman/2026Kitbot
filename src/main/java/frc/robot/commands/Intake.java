@@ -14,6 +14,8 @@ public class Intake extends Command {
   /** Creates a new Intake. */
 
   CANFuelSubsystem fuelSubsystem;
+  private double intakeVoltage;
+  private double feederVoltage;
 
   public Intake(CANFuelSubsystem fuelSystem) {
     addRequirements(fuelSystem);
@@ -24,15 +26,18 @@ public class Intake extends Command {
   // appropriate values for intaking
   @Override
   public void initialize() {
-    fuelSubsystem
-        .setIntakeLauncherRoller(1*SmartDashboard.getNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE));
-    fuelSubsystem.setFeederRoller(1*SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE));
+    intakeVoltage = SmartDashboard.getNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE);
+    feederVoltage = SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE);
+    fuelSubsystem.setIntakeLauncherRoller(intakeVoltage);
+    fuelSubsystem.setFeederRoller(feederVoltage);
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
   // command doesn't require updating any values while running
   @Override
   public void execute() {
+    fuelSubsystem.setIntakeLauncherRoller(intakeVoltage);
+    fuelSubsystem.setFeederRoller(feederVoltage);
   }
 
   // Called once the command ends or is interrupted. Stop the rollers
