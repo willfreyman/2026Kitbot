@@ -3,7 +3,9 @@
     "allow": [
       "Bash(git add -A)",
       "Bash(git commit -m \"$(cat <<''EOF''\nUpdate motor configuration and constants for 2026 Kitbot\n\n- Reduce current limits from 60A to 35A for drive and fuel motors\n- Adjust launching voltages for better control\n- Update AutoTarget smoothing and max command values\n- Configure fuel subsystem motors as brushless with corrected inversions\n- Add Claude settings for git operations\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push origin main)"
+      "Bash(git push origin main)",
+      "Bash(git commit -m \"Update code\")",
+      "Bash(git commit -m \"Update settings\")"
     ],
     "deny": [],
     "ask": []
