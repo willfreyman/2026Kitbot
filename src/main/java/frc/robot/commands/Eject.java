@@ -4,10 +4,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.Constants.FuelConstants.INTAKING_FEEDER_VOLTAGE;
+import static frc.robot.Constants.FuelConstants.INTAKING_INTAKE_VOLTAGE;
 import frc.robot.subsystems.CANFuelSubsystem;
-import static frc.robot.Constants.FuelConstants.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Eject extends Command {
@@ -25,10 +26,10 @@ public class Eject extends Command {
   @Override
   public void initialize() {
     fuelSubsystem
-        .setIntakeLauncherRoller(
-            -1 * SmartDashboard.getNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE));
+        .setIntakeRoller(
+            -1 * INTAKING_INTAKE_VOLTAGE);
     fuelSubsystem
-        .setFeederRoller(-1 * SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE));
+        .setFeederRoller(-1 * INTAKING_FEEDER_VOLTAGE);
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
@@ -40,7 +41,7 @@ public class Eject extends Command {
   // Called once the command ends or is interrupted. Stop the rollers
   @Override
   public void end(boolean interrupted) {
-    fuelSubsystem.setIntakeLauncherRoller(0);
+    fuelSubsystem.setIntakeRoller(0);
     fuelSubsystem.setFeederRoller(0);
   }
 

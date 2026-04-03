@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 //import com.revrobotics.spark.SparkBase.PersistMode;
 //import com.revrobotics.spark.SparkBase.ResetMode;
+import static com.revrobotics.PersistMode.kPersistParameters;
+import static com.revrobotics.ResetMode.kResetSafeParameters;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -13,7 +15,10 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.DriveConstants.*;
+import static frc.robot.Constants.DriveConstants.LEFT_FOLLOWER_ID;
+import static frc.robot.Constants.DriveConstants.LEFT_LEADER_ID;
+import static frc.robot.Constants.DriveConstants.RIGHT_FOLLOWER_ID;
+import static frc.robot.Constants.DriveConstants.RIGHT_LEADER_ID;
 
 public class CANDriveSubsystem extends SubsystemBase {
   private final SparkMax leftLeader;
@@ -23,7 +28,6 @@ public class CANDriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive drive;
   
-  @SuppressWarnings("removal")
   public CANDriveSubsystem() {
     // create brushed motors for drive
     leftLeader = new SparkMax(LEFT_LEADER_ID, MotorType.kBrushed);
@@ -71,19 +75,19 @@ public class CANDriveSubsystem extends SubsystemBase {
     rightFollowerConfig.follow(rightLeader);
 
     // APPLY configs to hardware
-    leftLeader.configure(leftLeaderConfig, SparkMax.ResetMode.kResetSafeParameters,
-        SparkMax.PersistMode.kPersistParameters);
+    leftLeader.configure(leftLeaderConfig, kResetSafeParameters,
+        kPersistParameters);
 
-    leftFollower.configure(leftFollowerConfig, SparkMax.ResetMode.kResetSafeParameters,
-        SparkMax.PersistMode.kPersistParameters);
+    leftFollower.configure(leftFollowerConfig, kResetSafeParameters,
+        kPersistParameters);
 
-    rightLeader.configure(rightLeaderConfig, SparkMax.ResetMode.kResetSafeParameters,
-        SparkMax.PersistMode.kPersistParameters);
+    rightLeader.configure(rightLeaderConfig, kResetSafeParameters,
+        kPersistParameters);
 
-    rightFollower.configure(rightFollowerConfig, SparkMax.ResetMode.kResetSafeParameters,
-        SparkMax.PersistMode.kPersistParameters);
+    rightFollower.configure(rightFollowerConfig, kResetSafeParameters,
+        kPersistParameters);
 
-    // Optional: makes arcadeDrive feel less “twitchy”
+    // Optional: makes arcadeDrive feel less “twitchy"
     drive.setDeadband(0.08);
   }
 
