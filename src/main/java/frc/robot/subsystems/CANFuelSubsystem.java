@@ -12,6 +12,10 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.FuelConstants.FEEDER_MOTOR_CURRENT_LIMIT;
+import static frc.robot.Constants.FuelConstants.FEEDER_MOTOR_ID;
+import static frc.robot.Constants.FuelConstants.INTAKE_MOTOR_ID;
+import static frc.robot.Constants.FuelConstants.SHOOTER_LEFT_MOTOR_ID;
+import static frc.robot.Constants.FuelConstants.SHOOTER_RIGHT_MOTOR_ID;
 
 
 public class CANFuelSubsystem extends SubsystemBase {
@@ -25,12 +29,6 @@ public class CANFuelSubsystem extends SubsystemBase {
   /** Creates a new CANBallSubsystem. */
   //@SuppressWarnings("removal")
   public CANFuelSubsystem() {
-      int INTAKE_MOTOR_ID = 5;
-      int FEEDER_MOTOR_ID = 6;
-      int SHOOTER_LEFT_MOTOR_ID = 7;
-      int SHOOTER_RIGHT_MOTOR_ID = 8;
-
-    //These are made locally because it was mad when they were in constants.java
     
     // create brushed motors for each of the motors on the launcher mechanism
     intakeRoller = new SparkFlex(INTAKE_MOTOR_ID, MotorType.kBrushless);
@@ -41,7 +39,7 @@ public class CANFuelSubsystem extends SubsystemBase {
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
     SparkFlexConfig feederConfig = new SparkFlexConfig();
-    feederConfig.inverted(true);
+    //feederConfig.inverted(true);
     feederConfig.smartCurrentLimit(FEEDER_MOTOR_CURRENT_LIMIT);
     feederRoller.configure(feederConfig, kResetSafeParameters, kPersistParameters);
 

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
+import static frc.robot.Constants.FuelConstants.LAUNCHING_INTAKE_VOLTAGE;
 import static frc.robot.Constants.FuelConstants.LAUNCHING_SHOOTER_VOLTAGE;
 import static frc.robot.Constants.FuelConstants.SPIN_UP_FEEDER_VOLTAGE;
 import frc.robot.subsystems.CANFuelSubsystem;
@@ -25,7 +26,7 @@ public class SpinUp extends Command {
   // appropriate values for intaking
   @Override
   public void initialize() {
-    fuelSubsystem.setIntakeRoller(0);
+    fuelSubsystem.setIntakeRoller(LAUNCHING_INTAKE_VOLTAGE);
     fuelSubsystem.setShooterRollers(LAUNCHING_SHOOTER_VOLTAGE);
     fuelSubsystem.setFeederRoller(SPIN_UP_FEEDER_VOLTAGE);
   }

@@ -27,9 +27,9 @@ public class Eject extends Command {
   public void initialize() {
     fuelSubsystem
         .setIntakeRoller(
-            -1 * INTAKING_INTAKE_VOLTAGE);
+            -1.5 * INTAKING_INTAKE_VOLTAGE);
     fuelSubsystem
-        .setFeederRoller(-1 * INTAKING_FEEDER_VOLTAGE);
+        .setFeederRoller(-0.5 * INTAKING_FEEDER_VOLTAGE);
   }
 
   // Called every time the scheduler runs while the command is scheduled. This
