@@ -6,8 +6,8 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
-import static frc.robot.Constants.FuelConstants.INTAKING_FEEDER_VOLTAGE;
-import static frc.robot.Constants.FuelConstants.INTAKING_INTAKE_VOLTAGE;
+import static frc.robot.Constants.FuelConstants.INTAKING_FEEDER_RPM;
+import static frc.robot.Constants.FuelConstants.INTAKING_INTAKE_RPM;
 import frc.robot.subsystems.CANFuelSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -26,8 +26,8 @@ public class Intake extends Command {
   @Override
   public void initialize() {
     fuelSubsystem
-        .setIntakeRoller(1*INTAKING_INTAKE_VOLTAGE);
-    fuelSubsystem.setFeederRoller(1*INTAKING_FEEDER_VOLTAGE);
+        .setIntakeRollerRPM(INTAKING_INTAKE_RPM);
+    fuelSubsystem.setFeederRollerRPM(INTAKING_FEEDER_RPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled. This

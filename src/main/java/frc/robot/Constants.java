@@ -49,6 +49,14 @@ public final class Constants {
     public static final double LAUNCHING_INTAKE_VOLTAGE = 9;
     public static final double SPIN_UP_FEEDER_VOLTAGE = -4;
     public static final double SPIN_UP_SECONDS = 1;
+
+
+    public static final double INTAKING_FEEDER_RPM = -2800;
+    public static final double INTAKING_INTAKE_RPM = 2800;
+    public static final double LAUNCHING_FEEDER_RPM = 2800;
+    public static final double LAUNCHING_SHOOTER_RPM = -4000;
+    public static final double LAUNCHING_INTAKE_RPM = 2800;
+    public static final double SPIN_UP_FEEDER_RPM = -1000;
         
     
   }
