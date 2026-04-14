@@ -54,7 +54,8 @@ public final class Constants {
     public static final double INTAKING_FEEDER_RPM = -2800;
     public static final double INTAKING_INTAKE_RPM = 2800;
     public static final double LAUNCHING_FEEDER_RPM = 2800;
-    public static final double LAUNCHING_SHOOTER_RPM = -4000;
+    public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1300;
+    public static final double LAUNCHING_SHOOTER_RPM = -3450 ; // -3500 normally, -1300 for slow shoot
     public static final double LAUNCHING_INTAKE_RPM = 2800;
     public static final double SPIN_UP_FEEDER_RPM = -1000;
         
@@ -74,11 +75,9 @@ public final class Constants {
   }
 
   public static final class ShakeConstants {
-    // Speed for shake movement (0.8 = 80% power for quick motion)
-    public static final double SHAKE_SPEED = 0.8;
+    public static final double SHAKE_SPEED = 1;
 
-    // Duration of each shake movement in seconds (0.2s forward, 0.2s backward)
     // Kept short to return to same position and dislodge stuck fuel
-    public static final double SHAKE_DURATION = 0.2;
+    public static final double SHAKE_DURATION = 0.3;
   }
 }
