@@ -18,6 +18,7 @@ import frc.robot.commands.ExampleAuto;
 import frc.robot.commands.Intake;
 import frc.robot.commands.LaunchSequence;
 import frc.robot.commands.LaunchSequenceSlow;
+import frc.robot.commands.LaunchSequenceFast;
 import frc.robot.commands.Shake;
 import frc.robot.commands.auto.*;
 import frc.robot.subsystems.CANDriveSubsystem;
@@ -106,6 +107,8 @@ public class RobotContainer {
 
     operatorController.y().onTrue(new Shake(driveSubsystem));
 
+    
+
     // Auto-collect: HOLD A on driver controller — drives toward fuel + runs intake
     /*driverController.a().whileTrue(
         new AutoCollect(driveSubsystem, driverController)
@@ -113,7 +116,7 @@ public class RobotContainer {
     */
     // Auto-targeting system: HOLD X button on driver controller
     // Driver can override with joysticks at any time while X is held
-    driverController.x().whileTrue(new AutoTarget(driveSubsystem, driverController));
+    driverController.x().whileTrue(new LaunchSequenceFast(fuelSubsystem));
 
 
   }
