@@ -24,6 +24,7 @@ import frc.robot.commands.auto.*;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
 import frc.robot.subsystems.OLEDPongSubsystem;
+import frc.robot.subsystems.PneumaticSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -36,6 +37,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final CANDriveSubsystem driveSubsystem = new CANDriveSubsystem();
   private final CANFuelSubsystem fuelSubsystem = new CANFuelSubsystem();
+  private final PneumaticSubsystem pneumaticSubsystem = new PneumaticSubsystem();
 
   // OLED Pong - Fun extra, disabled if causing issues
   // Set ENABLE_OLED_PONG to false to completely disable
@@ -117,6 +119,13 @@ public class RobotContainer {
     // Auto-targeting system: HOLD X button on driver controller
     // Driver can override with joysticks at any time while X is held
     driverController.x().whileTrue(new LaunchSequenceFast(fuelSubsystem));
+
+    // D-pad up/down: directly hold the extend/retract coil energized while pressed.
+    driverController.povUp().whileTrue(pneumaticSubsystem.holdExtend());
+    driverController.povDown().whileTrue(pneumaticSubsystem.holdRetract());
+
+    // Left trigger: press to toggle the compressor's pressure-regulated mode on/off.
+    driverController.leftTrigger().onTrue(pneumaticSubsystem.toggleCompressor());
 
 
   }

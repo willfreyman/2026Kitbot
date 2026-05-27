@@ -75,6 +75,16 @@ public final class Constants {
     public static final double ROTATION_SCALING = .8;
   }
 
+  public static final class PneumaticConstants {
+    public static final int HUB_CAN_ID = 9;
+    public static final int EXTEND_CHANNEL = 14;
+    public static final int RETRACT_CHANNEL = 15;
+    public static final double PULSE_SECONDS = 1.5;
+    public static final int ANALOG_SENSOR_CHANNEL = 0;
+    public static final double MIN_PRESSURE_PSI = 80;
+    public static final double MAX_PRESSURE_PSI = 120;
+  }
+
   public static final class ShakeConstants {
     public static final double SHAKE_SPEED = 1;
 
