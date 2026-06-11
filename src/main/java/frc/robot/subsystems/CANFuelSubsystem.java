@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import static com.revrobotics.PersistMode.kPersistParameters;
+import com.revrobotics.RelativeEncoder;
 import static com.revrobotics.ResetMode.kResetSafeParameters;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -12,6 +13,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.FuelConstants.FEEDER_MOTOR_CURRENT_LIMIT;
 import static frc.robot.Constants.FuelConstants.FEEDER_MOTOR_ID;
@@ -23,9 +25,11 @@ import static frc.robot.Constants.FuelConstants.SHOOTER_RIGHT_MOTOR_ID;
 public class CANFuelSubsystem extends SubsystemBase {
   
   private final SparkFlex feederRoller;
+  private final RelativeEncoder feederEncoder;
   private final SparkFlex intakeRoller;
   
   private final SparkFlex ShooterLeftRoller;
+  private final RelativeEncoder shooterLeftEncoder;
   private final SparkFlex ShooterRightRoller;
 
   private final SparkClosedLoopController feederController;
@@ -46,35 +50,40 @@ public class CANFuelSubsystem extends SubsystemBase {
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
     SparkFlexConfig feederConfig = new SparkFlexConfig();
-    feederConfig.closedLoop.p(0.0008).i(0).d(0.0001);
+    feederConfig.closedLoop.p(0.00015).i(0.000001).d(0.0003);
     //feederConfig.inverted(true);
     feederConfig.smartCurrentLimit(FEEDER_MOTOR_CURRENT_LIMIT);
     feederRoller.configure(feederConfig, kResetSafeParameters, kPersistParameters);
     feederController = feederRoller.getClosedLoopController();
 
+    feederEncoder = feederRoller.getEncoder();
+
     // create the configuration for the launcher roller, set a current limit, set
     // the motor to inverted so that positive values are used for both intaking and
     // launching, and apply the config to the controller
     SparkFlexConfig intakeConfig = new SparkFlexConfig();
-    intakeConfig.closedLoop.p(0.0008).i(0).d(0.0001);
+    intakeConfig.closedLoop.p(0.0002).i(0.000001).d(0.0004);
     //launcherConfig.inverted(true);
     intakeConfig.smartCurrentLimit(FEEDER_MOTOR_CURRENT_LIMIT);
     intakeRoller.configure(intakeConfig, kResetSafeParameters, kPersistParameters);
     intakeController = intakeRoller.getClosedLoopController();
 
     SparkFlexConfig shooterLeftConfig = new SparkFlexConfig();
-    shooterLeftConfig.closedLoop.p(0.0008).i(0).d(0.0001);
+    shooterLeftConfig.closedLoop.p(0.00079).i(0.0000002).d(0.0001);
     shooterLeftConfig.inverted(true);
     shooterLeftConfig.smartCurrentLimit(FEEDER_MOTOR_CURRENT_LIMIT);
     ShooterLeftRoller.configure(shooterLeftConfig, kResetSafeParameters, kPersistParameters);
     shooterLeftController = ShooterLeftRoller.getClosedLoopController();
+    shooterLeftEncoder = ShooterLeftRoller.getEncoder();
 
     SparkFlexConfig shooterRightConfig = new SparkFlexConfig();
-    shooterRightConfig.closedLoop.p(0.0008).i(0).d(0.0001);
+    shooterRightConfig.closedLoop.p(0.00079).i(0.0000002).d(0.0001);
     //launcherConfig.inverted(true);
     shooterRightConfig.smartCurrentLimit(FEEDER_MOTOR_CURRENT_LIMIT);
     ShooterRightRoller.configure(shooterRightConfig, kResetSafeParameters, kPersistParameters);
     shooterRightController = ShooterRightRoller.getClosedLoopController();
+    
+
   }
 
   // A method to set the voltage of the intake roller
@@ -115,5 +124,7 @@ public class CANFuelSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Feeder RPM", feederEncoder.getVelocity());
+    SmartDashboard.putNumber("Shooter Left RPM", shooterLeftEncoder.getVelocity());
   }
 }

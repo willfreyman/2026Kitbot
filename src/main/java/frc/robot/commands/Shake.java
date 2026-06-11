@@ -7,8 +7,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import static frc.robot.Constants.ShakeConstants.SHAKE_DURATION;
 import frc.robot.subsystems.CANDriveSubsystem;
-import static frc.robot.Constants.ShakeConstants.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shake extends SequentialCommandGroup {
@@ -17,7 +17,7 @@ public class Shake extends SequentialCommandGroup {
   public Shake(CANDriveSubsystem driveSubsystem) {
 
     addCommands(
-        new ShakeFwd(driveSubsystem).withTimeout(SHAKE_DURATION),
-        new ShakeBwd(driveSubsystem).withTimeout(SHAKE_DURATION));
+        new ShakeBwd(driveSubsystem).withTimeout(SHAKE_DURATION),
+        new ShakeFwd(driveSubsystem).withTimeout(SHAKE_DURATION+0.1));
   }
 }

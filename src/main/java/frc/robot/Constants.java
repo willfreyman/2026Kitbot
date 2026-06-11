@@ -81,7 +81,7 @@ public final class Constants {
     public static final int RETRACT_CHANNEL = 15;
     public static final double PULSE_SECONDS = 1.5;
     public static final int ANALOG_SENSOR_CHANNEL = 0;
-    public static final double MIN_PRESSURE_PSI = 80;
+    public static final double MIN_PRESSURE_PSI = 100;
     public static final double MAX_PRESSURE_PSI = 120;
   }
 
