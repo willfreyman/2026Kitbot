@@ -9,18 +9,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import static frc.robot.Constants.OperatorConstants.*;
-import frc.robot.commands.AutoCollect;
-import frc.robot.commands.AutoTarget;
+import static frc.robot.Constants.OperatorConstants.DRIVER_CONTROLLER_PORT;
+import static frc.robot.Constants.OperatorConstants.OPERATOR_CONTROLLER_PORT;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
 import frc.robot.commands.ExampleAuto;
 import frc.robot.commands.Intake;
 import frc.robot.commands.LaunchSequence;
-import frc.robot.commands.LaunchSequenceSlow;
 import frc.robot.commands.LaunchSequenceFast;
+import frc.robot.commands.LaunchSequenceSlow;
 import frc.robot.commands.Shake;
-import frc.robot.commands.auto.*;
+import frc.robot.commands.auto.DriveAndIntake;
+import frc.robot.commands.auto.ShootAndBackup;
+import frc.robot.commands.auto.ShootAndCollect;
+import frc.robot.commands.auto.TurnAndShoot;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
 import frc.robot.subsystems.OLEDPongSubsystem;
@@ -91,7 +93,7 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(new Intake(fuelSubsystem));
     // While the right bumper on the operator controller is held, spin up for 1
     // second, then launch fuel. When the button is released, stop.
-    operatorController.rightBumper().whileTrue(new LaunchSequence(fuelSubsystem));
+    operatorController.rightBumper().whileTrue(new LaunchSequence(fuelSubsystem, driveSubsystem));
     //Same as above, but slow
     operatorController.b().whileTrue(new LaunchSequenceSlow(fuelSubsystem));
     // While the A button is held on the operator controller, eject fuel back out

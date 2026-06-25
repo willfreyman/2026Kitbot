@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FuelConstants;
+import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -13,11 +15,16 @@ import frc.robot.subsystems.CANFuelSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class LaunchSequence extends SequentialCommandGroup {
   /** Creates a new LaunchSequence. */
-  public LaunchSequence(CANFuelSubsystem fuelSubsystem) {
+  public LaunchSequence(CANFuelSubsystem fuelSubsystem, CANDriveSubsystem driveSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SpinUp(fuelSubsystem).withTimeout(FuelConstants.SPIN_UP_SECONDS),
-        new Launch(fuelSubsystem));
+        Commands.parallel(
+                new Launch(fuelSubsystem),
+        new Shake(driveSubsystem).repeatedly()
+            )
+        
+    );
   }
 }

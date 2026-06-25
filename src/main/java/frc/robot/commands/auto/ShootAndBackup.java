@@ -23,7 +23,7 @@ public class ShootAndBackup extends SequentialCommandGroup {
         new WaitCommand(0.5),
 
         // Shoot any preloaded fuel (spin up + launch)
-        new LaunchSequence(fuelSubsystem).withTimeout(3.0),
+        new LaunchSequence(fuelSubsystem, driveSubsystem).withTimeout(3.0),
 
         // Back away from line at 60% speed for 2 seconds
         new AutoDrive(driveSubsystem, -0.6, 0.0).withTimeout(2.0)

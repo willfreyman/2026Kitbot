@@ -22,7 +22,7 @@ public class ShootAndCollect extends SequentialCommandGroup {
   public ShootAndCollect(CANDriveSubsystem driveSubsystem, CANFuelSubsystem fuelSubsystem) {
     addCommands(
         // Shoot any preloaded fuel
-        new LaunchSequence(fuelSubsystem).withTimeout(2.5),
+        new LaunchSequence(fuelSubsystem, driveSubsystem).withTimeout(2.5),
 
         // Drive forward while intaking for 2 seconds
         new ParallelDeadlineGroup(
@@ -40,7 +40,7 @@ public class ShootAndCollect extends SequentialCommandGroup {
         new WaitCommand(0.5),
 
         // Shoot collected fuel
-        new LaunchSequence(fuelSubsystem).withTimeout(3.0)
+        new LaunchSequence(fuelSubsystem, driveSubsystem).withTimeout(3.0)
     );
   }
 }

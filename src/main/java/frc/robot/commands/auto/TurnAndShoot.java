@@ -28,7 +28,7 @@ public class TurnAndShoot extends SequentialCommandGroup {
         new WaitCommand(0.5),
 
         // Shoot
-        new LaunchSequence(fuelSubsystem).withTimeout(3.0),
+        new LaunchSequence(fuelSubsystem, driveSubsystem).withTimeout(3.0),
 
         // Back up slightly
         new AutoDrive(driveSubsystem, -0.5, 0.0).withTimeout(1.0)
