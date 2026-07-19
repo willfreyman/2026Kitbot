@@ -54,7 +54,7 @@ public final class Constants {
     public static final double INTAKING_FEEDER_RPM = -2800;
     public static final double INTAKING_INTAKE_RPM = 2800;
     public static final double LAUNCHING_FEEDER_RPM = 2500;
-    public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1200;
+    public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1100;
     public static final double LAUNCHING_SHOOTER_FAST_RPM = -6000;
     public static final double LAUNCHING_SHOOTER_RPM = -2800 ; // -3000 normally, -1300 for slow shoot
     public static final double LAUNCHING_INTAKE_RPM = 2500;
@@ -87,7 +87,7 @@ public final class Constants {
     public static final double UNCLOG_RETRACT_SECONDS = 4;
     public static final int ANALOG_SENSOR_CHANNEL = 0;
     public static final double MIN_PRESSURE_PSI = 70;
-    public static final double MAX_PRESSURE_PSI = 90;
+    public static final double MAX_PRESSURE_PSI = 120;
   }
 
   public static final class ShakeConstants {
