@@ -107,6 +107,23 @@ public class OLEDPongSubsystem extends SubsystemBase {
   private static final byte[] LETTER_S = {0x46, 0x49, 0x49, 0x49, 0x31};
   private static final byte[] LETTER_DASH = {0x08, 0x08, 0x08, 0x08, 0x08};
 
+  // ---- Donation QR code ----
+  // 25x25 QR (version 2, EC level L) encoding "https://nightbots.org/donate".
+  // Each int is one row; bit x set (LSB = column 0) means a dark module.
+  // Generated offline with segno.
+  private static final int QR_SIZE = 25;
+  private static final int QR_SCALE = 2; // pixels per module -> 50x50 px
+  private static final int[] QR_ROWS = {
+    33304703, 17167681, 24383581, 24508253, 24457821, 17097537, 33379711,
+    116224, 11269087, 8998325, 28423507, 18808852, 30828099, 11078039,
+    29286741, 18502973, 6271845, 3255040, 30765951, 20008001, 14678877,
+    32935773, 23086429, 20516673, 33324927
+  };
+
+  // Periodically interrupt the Pong game to show the donation QR code.
+  private static final long QR_INTERVAL_MS = 30000; // show once every 30s
+  private static final long QR_DURATION_MS = 8000;  // display it for 8s
+
   public OLEDPongSubsystem() {
     try {
       // Initialize I2C on onboard port
@@ -304,6 +321,31 @@ public class OLEDPongSubsystem extends SubsystemBase {
     drawText(scoreText, scoreX, 35);
   }
 
+  // Draw the donation QR code centered, dark-on-light (dark modules unlit) with
+  // a lit "quiet zone" border so a phone camera can read it.
+  private void drawQRCode() {
+    int qrPx = QR_SIZE * QR_SCALE;   // 50
+    int border = 6;                  // quiet-zone pixels on each side
+    int box = qrPx + border * 2;     // 62 -> fits in the 64px height
+    int boxX = (SCREEN_WIDTH - box) / 2;
+    int boxY = (SCREEN_HEIGHT - box) / 2;
+
+    // Lit white background including the quiet zone.
+    drawRect(boxX, boxY, box, box, true);
+
+    int originX = boxX + border;
+    int originY = boxY + border;
+    for (int y = 0; y < QR_SIZE; y++) {
+      int rowBits = QR_ROWS[y];
+      for (int x = 0; x < QR_SIZE; x++) {
+        if (((rowBits >> x) & 1) != 0) {
+          // Dark module -> turn those pixels off (black).
+          drawRect(originX + x * QR_SCALE, originY + y * QR_SCALE, QR_SCALE, QR_SCALE, false);
+        }
+      }
+    }
+  }
+
   // Center line removed for cleaner look
 
   private void updatePaddles() {
@@ -464,6 +506,14 @@ public class OLEDPongSubsystem extends SubsystemBase {
     }
 
     try {
+      // Periodically pause the game and show the donation QR code instead.
+      if (System.currentTimeMillis() % QR_INTERVAL_MS < QR_DURATION_MS) {
+        clearBuffer();
+        drawQRCode();
+        updateDisplay();
+        return;
+      }
+
       // Update game logic
       if (gameState == GameState.GAME_OVER &&
           System.currentTimeMillis() - gameOverStartTime > GAME_OVER_DURATION_MS) {

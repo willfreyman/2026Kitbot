@@ -54,7 +54,7 @@ public final class Constants {
     public static final double INTAKING_FEEDER_RPM = -2800;
     public static final double INTAKING_INTAKE_RPM = 2800;
     public static final double LAUNCHING_FEEDER_RPM = 2500;
-    public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1300;
+    public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1200;
     public static final double LAUNCHING_SHOOTER_FAST_RPM = -6000;
     public static final double LAUNCHING_SHOOTER_RPM = -2800 ; // -3000 normally, -1300 for slow shoot
     public static final double LAUNCHING_INTAKE_RPM = 2500;
@@ -80,12 +80,20 @@ public final class Constants {
     public static final int EXTEND_CHANNEL = 14;
     public static final int RETRACT_CHANNEL = 15;
     public static final double PULSE_SECONDS = 1.5;
+    // How long each solenoid stays energized per half-cycle while unclogging.
+    // Retract is given more time because it is slower to start moving (smaller
+    // rod-side area / more air to exhaust than extend).
+    public static final double UNCLOG_EXTEND_SECONDS = 2;
+    public static final double UNCLOG_RETRACT_SECONDS = 4;
     public static final int ANALOG_SENSOR_CHANNEL = 0;
     public static final double MIN_PRESSURE_PSI = 70;
     public static final double MAX_PRESSURE_PSI = 90;
   }
 
   public static final class ShakeConstants {
+    // Set to false to temporarily disable the robot shake while shooting
+    public static final boolean SHAKE_ENABLED = true;
+
     public static final double SHAKE_SPEED = 0.75;
 
     // Kept short to return to same position and dislodge stuck fuel

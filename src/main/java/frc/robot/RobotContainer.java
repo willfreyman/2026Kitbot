@@ -15,9 +15,9 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
 import frc.robot.commands.ExampleAuto;
 import frc.robot.commands.Intake;
+import frc.robot.commands.Juggle;
 import frc.robot.commands.LaunchSequence;
 import frc.robot.commands.LaunchSequenceFast;
-import frc.robot.commands.LaunchSequenceSlow;
 import frc.robot.commands.Shake;
 import frc.robot.commands.auto.DriveAndIntake;
 import frc.robot.commands.auto.ShootAndBackup;
@@ -94,8 +94,8 @@ public class RobotContainer {
     // While the right bumper on the operator controller is held, spin up for 1
     // second, then launch fuel. When the button is released, stop.
     operatorController.rightBumper().whileTrue(new LaunchSequence(fuelSubsystem, driveSubsystem));
-    //Same as above, but slow
-    operatorController.b().whileTrue(new LaunchSequenceSlow(fuelSubsystem));
+    // Juggle: low shooter power so fuel pops up and falls back into the hopper
+    operatorController.b().whileTrue(new Juggle(fuelSubsystem));
     // While the A button is held on the operator controller, eject fuel back out
     // the intake
     operatorController.a().whileTrue(new Eject(fuelSubsystem));
@@ -128,6 +128,10 @@ public class RobotContainer {
 
     // Left trigger: press to toggle the compressor's pressure-regulated mode on/off.
     driverController.leftTrigger().onTrue(pneumaticSubsystem.toggleCompressor());
+
+    // D-pad right: toggle unclog - arms the compressor and rapidly alternates the
+    // extend/retract solenoids (0.5s each) to shake loose a jam. Press again to stop.
+    driverController.povRight().toggleOnTrue(pneumaticSubsystem.unclog());
 
 
   }

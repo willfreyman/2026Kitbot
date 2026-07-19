@@ -11,9 +11,9 @@ import frc.robot.subsystems.CANFuelSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LaunchSequenceSlow extends SequentialCommandGroup {
-  /** Creates a new LaunchSequence. */
-  public LaunchSequenceSlow(CANFuelSubsystem fuelSubsystem) {
+public class Juggle extends SequentialCommandGroup {
+  /** Creates a new Juggle. Slow launch that pops fuel back into the hopper. */
+  public Juggle(CANFuelSubsystem fuelSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand((), new BarCommand());
     addCommands(

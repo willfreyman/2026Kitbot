@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FuelConstants;
+import frc.robot.Constants.ShakeConstants;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
 
@@ -20,11 +21,10 @@ public class LaunchSequence extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SpinUp(fuelSubsystem).withTimeout(FuelConstants.SPIN_UP_SECONDS),
-        Commands.parallel(
+        ShakeConstants.SHAKE_ENABLED
+            ? Commands.parallel(
                 new Launch(fuelSubsystem),
-        new Shake(driveSubsystem).repeatedly()
-            )
-        
-    );
+                new Shake(driveSubsystem).repeatedly())
+            : new Launch(fuelSubsystem));
   }
 }
