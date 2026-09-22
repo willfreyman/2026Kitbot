@@ -53,7 +53,7 @@ public final class Constants {
 
     public static final double INTAKING_FEEDER_RPM = -2800;
     public static final double INTAKING_INTAKE_RPM = 2800;
-    public static final double LAUNCHING_FEEDER_RPM = 2500;
+    public static final double LAUNCHING_FEEDER_RPM = 3500;
     public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1100;
     public static final double LAUNCHING_SHOOTER_FAST_RPM = -6000;
     public static final double LAUNCHING_SHOOTER_RPM = -2800 ; // -3000 normally, -1300 for slow shoot
