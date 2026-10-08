@@ -24,7 +24,7 @@ public final class Constants {
 
     // Current limit for drivetrain motors. 60A is a reasonable maximum to reduce
     // likelihood of tripping breakers or damaging CIM motors
-    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 40;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 20;
   }
 
   public static final class FuelConstants {
@@ -56,7 +56,7 @@ public final class Constants {
     public static final double LAUNCHING_FEEDER_RPM = 2500;
     public static final double LAUNCHING_SHOOTER_SLOW_RPM = -1100;
     public static final double LAUNCHING_SHOOTER_FAST_RPM = -6000;
-    public static final double LAUNCHING_SHOOTER_RPM = -2800 ; // -3000 normally, -1300 for slow shoot
+    public static final double LAUNCHING_SHOOTER_RPM = -5000 ; // -3000 normally, -1300 for slow shoot
     public static final double LAUNCHING_INTAKE_RPM = 2500;
     public static final double SPIN_UP_FEEDER_RPM = -1750;
         
@@ -94,7 +94,7 @@ public final class Constants {
     // Set to false to temporarily disable the robot shake while shooting
     public static final boolean SHAKE_ENABLED = true;
 
-    public static final double SHAKE_SPEED = 0.75;
+    public static final double SHAKE_SPEED = 1;
 
     // Kept short to return to same position and dislodge stuck fuel
     public static final double SHAKE_DURATION = 0.3;
