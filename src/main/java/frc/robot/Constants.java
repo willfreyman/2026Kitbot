@@ -64,6 +64,8 @@ public final class Constants {
   }
 
   public static final class OperatorConstants {
+
+    public static final double TRIGGER_THRESHOLD = 0.5;
     // Port constants for driver and operator controllers. These should match the
     // values in the Joystick tab of the Driver Station software
     public static final int DRIVER_CONTROLLER_PORT = 0;
@@ -76,6 +78,8 @@ public final class Constants {
   }
 
   public static final class PneumaticConstants {
+
+
     public static final int HUB_CAN_ID = 9;
     public static final int EXTEND_CHANNEL = 14;
     public static final int RETRACT_CHANNEL = 15;

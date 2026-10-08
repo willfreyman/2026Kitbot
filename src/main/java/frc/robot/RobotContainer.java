@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import static frc.robot.Constants.OperatorConstants.DRIVER_CONTROLLER_PORT;
 import static frc.robot.Constants.OperatorConstants.OPERATOR_CONTROLLER_PORT;
+import static frc.robot.Constants.OperatorConstants.TRIGGER_THRESHOLD;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
 import frc.robot.commands.ExampleAuto;
@@ -89,11 +90,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+
+
     // While the left bumper on operator controller is held, intake Fuel
-    operatorController.leftBumper().whileTrue(new Intake(fuelSubsystem));
+    operatorController.leftTrigger(TRIGGER_THRESHOLD).whileTrue(new Intake(fuelSubsystem));
     // While the right bumper on the operator controller is held, spin up for 1
     // second, then launch fuel. When the button is released, stop.
-    operatorController.rightBumper().whileTrue(new LaunchSequence(fuelSubsystem, driveSubsystem));
+    operatorController.rightTrigger(TRIGGER_THRESHOLD).whileTrue(new LaunchSequence(fuelSubsystem, driveSubsystem));
     // Juggle: low shooter power so fuel pops up and falls back into the hopper
     operatorController.b().whileTrue(new Juggle(fuelSubsystem));
     // While the A button is held on the operator controller, eject fuel back out
@@ -127,7 +130,7 @@ public class RobotContainer {
     driverController.povDown().whileTrue(pneumaticSubsystem.holdRetract());
 
     // Left trigger: press to toggle the compressor's pressure-regulated mode on/off.
-    driverController.leftTrigger().onTrue(pneumaticSubsystem.toggleCompressor());
+    driverController.leftBumper().onTrue(pneumaticSubsystem.toggleCompressor());
 
     // D-pad right: toggle unclog - arms the compressor and rapidly alternates the
     // extend/retract solenoids (0.5s each) to shake loose a jam. Press again to stop.

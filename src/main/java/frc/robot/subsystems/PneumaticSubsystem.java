@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import static frc.robot.Constants.PneumaticConstants.EXTEND_CHANNEL;
 import static frc.robot.Constants.PneumaticConstants.HUB_CAN_ID;
 import static frc.robot.Constants.PneumaticConstants.MAX_PRESSURE_PSI;
@@ -29,7 +28,7 @@ public class PneumaticSubsystem extends SubsystemBase {
 
   // Whether the compressor's analog control loop is currently armed.
   // Even when true, the PH only runs the motor while pressure < MIN_PRESSURE_PSI.
-  private boolean compressorActive = false;
+  private boolean compressorActive = true;
 
   public PneumaticSubsystem() {
     piston.set(Value.kOff);
