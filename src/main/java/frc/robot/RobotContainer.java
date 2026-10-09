@@ -101,7 +101,7 @@ public class RobotContainer {
     operatorController.b().whileTrue(new Juggle(fuelSubsystem));
     // While the A button is held on the operator controller, eject fuel back out
     // the intake
-    operatorController.a().whileTrue(new Eject(fuelSubsystem));
+    operatorController.leftBumper().whileTrue(new Eject(fuelSubsystem));
 
     // Set the default command for the drive subsystem to the command provided by
     // factory with the values provided by the joystick axes on the driver
@@ -123,14 +123,14 @@ public class RobotContainer {
     */
     // Auto-targeting system: HOLD X button on driver controller
     // Driver can override with joysticks at any time while X is held
-    driverController.x().whileTrue(new LaunchSequenceFast(fuelSubsystem));
+    driverController.rightBumper().whileTrue(new LaunchSequenceFast(fuelSubsystem));
 
     // D-pad up/down: directly hold the extend/retract coil energized while pressed.
     driverController.povUp().whileTrue(pneumaticSubsystem.holdExtend());
     driverController.povDown().whileTrue(pneumaticSubsystem.holdRetract());
 
     // Left trigger: press to toggle the compressor's pressure-regulated mode on/off.
-    driverController.leftBumper().onTrue(pneumaticSubsystem.toggleCompressor());
+    driverController.povLeft().onTrue(pneumaticSubsystem.toggleCompressor());
 
     // D-pad right: toggle unclog - arms the compressor and rapidly alternates the
     // extend/retract solenoids (0.5s each) to shake loose a jam. Press again to stop.

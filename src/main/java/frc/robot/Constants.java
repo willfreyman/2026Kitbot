@@ -98,9 +98,9 @@ public final class Constants {
     // Set to false to temporarily disable the robot shake while shooting
     public static final boolean SHAKE_ENABLED = true;
 
-    public static final double SHAKE_SPEED = 1;
+    public static final double SHAKE_SPEED = 0.9;
 
     // Kept short to return to same position and dislodge stuck fuel
-    public static final double SHAKE_DURATION = 0.3;
+    public static final double SHAKE_DURATION = 0.4;
   }
 }
