@@ -10,17 +10,23 @@ import frc.robot.commands.AutoDrive;
 import frc.robot.commands.LaunchSequence;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
+import frc.robot.subsystems.PneumaticSubsystem;
 
 /**
- * Autonomous: Shoot preloaded fuel, then back up away from line
+ * Autonomous: Wait for full tank pressure, extend the hopper, shoot preloaded
+ * fuel, then back up away from line
  * Good for: When you have preloaded fuel and want a simple, reliable auto
  */
 public class ShootAndBackup extends SequentialCommandGroup {
 
-  public ShootAndBackup(CANDriveSubsystem driveSubsystem, CANFuelSubsystem fuelSubsystem) {
+  public ShootAndBackup(CANDriveSubsystem driveSubsystem, CANFuelSubsystem fuelSubsystem,
+      PneumaticSubsystem pneumaticSubsystem) {
     addCommands(
         // Wait a moment for robot to settle
         new WaitCommand(0.5),
+        // Compressor has been running since boot; wait until the tank is at max
+        // pressure (times out after PRESSURIZE_TIMEOUT_SECONDS), then extend hopper
+        pneumaticSubsystem.pressurizeAndExtend(),
 
         // Shoot any preloaded fuel (spin up + launch)
         new LaunchSequence(fuelSubsystem, driveSubsystem).withTimeout(3.0),

@@ -90,8 +90,15 @@ public final class Constants {
     public static final double UNCLOG_EXTEND_SECONDS = 2;
     public static final double UNCLOG_RETRACT_SECONDS = 4;
     public static final int ANALOG_SENSOR_CHANNEL = 0;
-    public static final double MIN_PRESSURE_PSI = 70;
+    // Compressor turns on as soon as pressure drops below MIN and runs until MAX.
+    // MIN is kept close to MAX so the tank is topped off almost immediately
+    // after any air use. (120 psi is the legal tank maximum.)
+    public static final double MIN_PRESSURE_PSI = 115;
     public static final double MAX_PRESSURE_PSI = 120;
+    // Safety net for the auto: give up waiting for MAX_PRESSURE_PSI after this
+    // long (e.g. sensor unplugged or leak) and extend the hopper anyway so the
+    // rest of the auto still runs.
+    public static final double PRESSURIZE_TIMEOUT_SECONDS = 5;
   }
 
   public static final class ShakeConstants {

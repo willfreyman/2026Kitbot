@@ -65,7 +65,7 @@ public class RobotContainer {
     configureBindings();
 
     // Configure autonomous modes
-    autoChooser.setDefaultOption("Shoot and Backup", new ShootAndBackup(driveSubsystem, fuelSubsystem));
+    autoChooser.setDefaultOption("Shoot and Backup", new ShootAndBackup(driveSubsystem, fuelSubsystem, pneumaticSubsystem));
     autoChooser.addOption("Shoot and Collect", new ShootAndCollect(driveSubsystem, fuelSubsystem));
     autoChooser.addOption("Drive and Intake", new DriveAndIntake(driveSubsystem, fuelSubsystem));
     autoChooser.addOption("Turn Left and Shoot", new TurnAndShoot(driveSubsystem, fuelSubsystem, true));
@@ -129,11 +129,10 @@ public class RobotContainer {
     driverController.povUp().whileTrue(pneumaticSubsystem.holdExtend());
     driverController.povDown().whileTrue(pneumaticSubsystem.holdRetract());
 
-    // Left trigger: press to toggle the compressor's pressure-regulated mode on/off.
-    driverController.povLeft().onTrue(pneumaticSubsystem.toggleCompressor());
+    // Compressor is always on (armed in PneumaticSubsystem constructor); no toggle.
 
-    // D-pad right: toggle unclog - arms the compressor and rapidly alternates the
-    // extend/retract solenoids (0.5s each) to shake loose a jam. Press again to stop.
+    // D-pad right: toggle unclog - alternates the extend/retract solenoids
+    // (see UNCLOG_*_SECONDS) to shake loose a jam. Press again to stop.
     driverController.povRight().toggleOnTrue(pneumaticSubsystem.unclog());
 
 
